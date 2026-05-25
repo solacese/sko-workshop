@@ -65,13 +65,3 @@ docker network connect sam-network solace
 # Verify
 docker network inspect sam-network --format '{{range .Containers}}{{.Name}} {{end}}'
 ```
-
-### Verify the Environment
-
-```bash
-# Target your local instance
-sam config apply --target http://localhost:8000 --dry-run
-
-# Or check health directly
-curl -s http://localhost:8001/api/v1/platform/health | jq .
-```
