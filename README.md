@@ -6,16 +6,12 @@ the session.
 
 ## Table of Contents
 
-- [Getting Started](#getting-started)
 - [Environment Setup](#environment-setup)
   - [Prerequisites](#prerequisites)
   - [If using Docker solace broker: Add the Solace Broker to the Docker Network](#if-using-docker-solace-broker-add-the-solace-broker-to-the-docker-network)
   - [Verify the Environment](#verify-the-environment)
+- [Getting Started](#getting-started)
 
-## Getting Started
-
-Follow the guides in the guides directory, starting with
-[Getting Started](guides/Getting_Started.md).
 
 ## Environment Setup
 
@@ -64,3 +60,8 @@ docker network connect sam-network solace
 # Verify
 docker network inspect sam-network --format '{{range .Containers}}{{.Name}} {{end}}'
 ```
+
+## Getting Started
+
+Follow the guides in the guides directory, starting with
+[Getting Started](guides/Getting_Started.md).
