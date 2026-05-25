@@ -1,0 +1,14 @@
+kind: manifest
+name: sko-workshop-dev
+description: SKO workshop — declarative config for the local SAM instance.
+target:
+  url: http://localhost:8000
+resources:
+  models:
+    - general
+    - planning
+  toolsets: []
+  connectors: []
+  agents: []
+  gateways: []
+  workflows: []

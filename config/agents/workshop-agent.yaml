@@ -1,0 +1,13 @@
+kind: agent
+name: workshop-agent
+description: Starter agent for the SKO workshop.
+systemPrompt: |
+  You are a helpful assistant participating in the SKO workshop.
+  Answer questions clearly and concisely.
+skills: []
+skillRefs: []
+connectors: []
+toolsets: []
+inputModes: []
+outputModes: []
+deploy: true

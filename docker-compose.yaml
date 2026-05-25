@@ -1,0 +1,41 @@
+services:
+  sam-go:
+    image: sam-enterprise:latest
+    platform: linux/amd64
+    ports:
+      - "8000:8000"   # SAM UI + Gateway API
+      - "8001:8001"   # Platform API (health, config)
+    volumes:
+      - sam-data:/tmp/sam-data
+    networks:
+      # sam-network is the pre-existing bridge network the Solace broker
+      # container ("solace") is attached to. Joining the same network lets
+      # this container reach the broker by its container name as the hostname
+      # (e.g. ws://solace:8008) without any host.docker.internal tricks.
+      - sam-network
+    # Run as root so the STR worker can create /app/data/volumes at startup.
+    # The image defaults to a non-root user (uid 10001) which lacks write
+    # access to paths outside /tmp/sam-data.
+    user: root
+    env_file:
+      # All environment variables are loaded from .env in this directory.
+      # Edit .env to change broker, LLM, or data path settings.
+      - .env
+
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8001/api/v1/platform/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+networks:
+  # Declare sam-network as external so Docker Compose attaches to the
+  # already-running network rather than creating a new one. The Solace
+  # broker container must already be running on this network before
+  # docker compose up.
+  sam-network:
+    external: true
+
+volumes:
+  sam-data:
