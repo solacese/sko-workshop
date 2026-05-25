@@ -242,10 +242,6 @@ resources:
 > [!TIP]
 > Again, We will almost never be calling these commands directly from the cli. The SAM skills houses detailed documentation of all of this, and hence, we will only be using AI-assisted tools to interact with sam cli
 
-### Default Manifest Discovery
-
-If you run `sam config apply` without `-m`, the CLI looks for `manifest.yaml` or `manifest.yml` in the current directory. Keep your manifest at the project root for this to work automatically.
-
 ### Useful Flags
 
 | Flag | Description |
