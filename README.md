@@ -24,16 +24,13 @@ Follow the guides in the guides directory, starting with
 Before starting, make sure you have the following:
 
 1. The `sam-enterprise` Docker image loaded locally (`docker images | grep sam-enterprise`)
-    > [!TIP]
     > You can use SAM Desktop instead
 1. Docker with a running Solace broker container attached to the `sam-network` bridge network
-    > [!TIP]
     > You can use Solace Cloud instead
 1. SAM cli installed and placed in your bin executable
     ```
     ln -sf "$repo/bin/sam-enterprise" "$HOME/go/bin/sam"
     ```
-    > [!NOTE]
     > You can replace `"$HOME/go/bin/sam"` with your $PATH bin 
 1. A LiteLLM API token
 1. Claude Code installed (`claude --version`)
