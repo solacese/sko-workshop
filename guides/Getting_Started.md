@@ -28,6 +28,16 @@ Welcome to the SKO workshop. This guide walks you through standing up your local
     ```
 1. Update the necessary vars
 
+## Install the SAM skills
+
+```bash
+# Install the SAM skill into Claude Code
+sam skill install
+
+# Verify the installed version matches the CLI
+sam skill check
+```
+
 ## Start the SAM Stack
 
 ```bash
@@ -257,7 +267,7 @@ resources:
 
 ### Using AI to Write Declarative Config
 
-The recommended workflow for authoring agent and workflow configs is to use Claude Code with the SAM skill installed:
+The recommended workflow for authoring agent and workflow configs is to use Claude Code with the SAM skill installed.
 
 ```bash
 # Install the SAM skill into Claude Code
