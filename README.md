@@ -18,30 +18,37 @@ the session.
 All required executables will be shared the day of the workshop
 
 Before starting, make sure you have the following:
-
-1. SAM Desktop executable: SolaceAgentMesh.dmg or sam-desktop-enterprise.exe
-1. OR The `sam-enterprise` Docker image loaded locally
-    ```
-    docker load -i sam-enterprise-latest.tar.gz
-    ```
-1. Docker with a running Solace broker container attached to the `sam-network` bridge network
-    > Note: You can use Solace Cloud instead
-1. SAM cli installed and placed in your bin executable
+1. SAM Client
+    1. SAM Desktop executable: SolaceAgentMesh.dmg or sam-desktop-enterprise.exe
+        > Note: On MacOS, trust the .dmg pre running
+        ```bash
+        xattr -cr /path/to/SolaceAgentMesh.dmg
+        ```
+    1. OR The `sam-enterprise` Docker image loaded locally
+        ```
+        docker load -i sam-enterprise-latest.tar.gz
+        ```
+1. [Optional] Solace Broker
+    1. Docker with a running Solace broker container attached to the `sam-network` bridge network
+        > Note: You can use Solace Cloud instead
+1. SAM cli installed in a dedicated dir
+    > Note: make sure you do not have any `sam` command installed in your system
     
     ```bash
     # MacOS / Linux / WSL
-    ln -sf "sam-enterprise" "$HOME/go/bin/sam"
+    cd <path_to_cli_dir>
+    export PATH=$PATH:$PWD
+    # Open new terminal and confirm sam -v works
     ```
 
     ```bash
     # Windows from cmd.ex
-    echo @"%USERPROFILE%\sam-enterprise-windows-amd64.exe" %* > "%GOPATH%\bin\sam.cmd"
+    echo @"%USERPROFILE%\sam-enterprise-windows-amd64.exe" %* > "%USERPROFILE%\bin\sam.cmd"
     ```
 
     > Note: You can replace `"$HOME/go/bin/sam"` with your $PATH bin 
 1. A LiteLLM API token
 1. Claude Code installed (`claude --version`)
-1. The SAM CLI installed (`sam --version`)
 
 ### If using Docker solace broker: Add the Solace Broker to the Docker Network
 
