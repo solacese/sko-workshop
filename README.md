@@ -45,8 +45,6 @@ Before starting, make sure you have the following:
     # Windows from cmd.ex
     echo @"%USERPROFILE%\sam-enterprise-windows-amd64.exe" %* > "%USERPROFILE%\bin\sam.cmd"
     ```
-
-    > Note: You can replace `"$HOME/go/bin/sam"` with your $PATH bin 
 1. A LiteLLM API token
 1. Claude Code installed (`claude --version`)
 
