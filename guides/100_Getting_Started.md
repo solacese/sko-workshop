@@ -54,14 +54,12 @@ The health check hits `http://localhost:8001/api/v1/platform/health`. Once it re
 ## The New SAM Architecture
 
 The decision to re-architect Agent Mesh and rewrite it in Go (two independent decisions that happened to be made together) was driven by real technical pain: 
-1. Python's threading limitations,
-1. memory leaks,
-1. deadlocks,
-1. the global interpreter lock,
-1. high infrastructure cost of goods,
-1. and Kubernetes friction made Python structurally unsuitable for a high-concurrency,
-1. server-based,
-1. SaaS-delivered multi-agent platform.
+1. One process or K8S pod per agent/workflow/a2a-proxy was unnecessarily expensive
+1. Adding new agents in a K8S deployment was slow and combersome
+1. Very difficult to add new custom tools in a secure way
+1. Overall performance and scalability was insufficient for an enterprise solution
+1. Python was the wrong tool for the job - it has poor concurrency performance, no true static typing and a higher attack surface
+1. Go is the new language of enterprise integration - fast, highly-concurrent, multi-platform and more secure
 
 The new architecture was originally planned in Python. Go was adopted separately as an experiment that proved itself superior, and it became the obvious choice.
 

@@ -9,25 +9,41 @@ the session.
 - [Environment Setup](#environment-setup)
   - [Prerequisites](#prerequisites)
   - [If using Docker solace broker: Add the Solace Broker to the Docker Network](#if-using-docker-solace-broker-add-the-solace-broker-to-the-docker-network)
-  - [Verify the Environment](#verify-the-environment)
 - [Getting Started](#getting-started)
 
 
 ## Environment Setup
 
 ### Prerequisites
+All required executables are under the [resources](./resources) dir
 
 Before starting, make sure you have the following:
 
 1. The `sam-enterprise` Docker image loaded locally (`docker images | grep sam-enterprise`)
-    > You can use SAM Desktop instead
+    ```
+    docker load -i sam-enterprise-latest.tar.gz
+    ```
+    > Note: You can use SAM Desktop instead
 1. Docker with a running Solace broker container attached to the `sam-network` bridge network
-    > You can use Solace Cloud instead
+    > Note: You can use Solace Cloud instead
 1. SAM cli installed and placed in your bin executable
+    
+    ```bash
+    # MacOS
+    ln -sf "sam-enterprise-darwin-arm64" "$HOME/go/bin/sam"
     ```
-    ln -sf "$repo/bin/sam-enterprise" "$HOME/go/bin/sam"
+
+    ```bash
+    # Linux / WSL
+    ln -sf "sam-enterprise-linux-amd64" "$HOME/go/bin/sam"
     ```
-    > You can replace `"$HOME/go/bin/sam"` with your $PATH bin 
+
+    ```bash
+    # Windows
+    ln -sf "sam-enterprise-windows-amd64.exe" "$HOME/go/bin/sam"
+    ```
+
+    > Note: You can replace `"$HOME/go/bin/sam"` with your $PATH bin 
 1. A LiteLLM API token
 1. Claude Code installed (`claude --version`)
 1. The SAM CLI installed (`sam --version`)
@@ -64,4 +80,13 @@ docker network inspect sam-network --format '{{range .Containers}}{{.Name}} {{en
 ## Getting Started
 
 Follow the guides in the guides directory, starting with
-[Getting Started](guides/Getting_Started.md).
+[Getting Started](guides/100_Getting_Started.md).
+
+## ADLC Guides
+
+1. [Hiring](guides/200_Hiring.md)
+2. [Onboarding](guides/300_Onboarding.md)
+3. [Coaching](guides/400_Coaching.md)
+4. [Supervision](guides/500_Supervision.md)
+5. [Teamwork](guides/600_Teamwork.md)
+6. [Improvement](guides/700_Improvement.md)
