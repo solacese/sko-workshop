@@ -16,7 +16,7 @@ Welcome to the SKO workshop. This guide walks you through standing up your local
   - [SAM CLI](#sam-cli)
   - [Declarative SAM — `sam config apply`](#declarative-sam--sam-config-apply)
   - [No ADK — What Changed](#no-adk--what-changed)
-  - [Back to Workshop Exercise](#back-to-workshop-exercise)
+- [Back to Workshop Exercise](#back-to-workshop-exercise)
 
 ---
 
@@ -40,16 +40,33 @@ sam skill check
 
 ## Start the SAM Stack
 
-```bash
-# From this directory
-docker compose up
-```
+1. Launch the SAM Desktop app
+1. OR run the following docker command
 
-The container exposes two ports:
-- **8000** — SAM UI and the Gateway API (agent requests go here)
-- **8001** — Platform API (health, config, deployment)
+  ```bash
+  # From this directory
+  docker compose up
+  ```
 
-The health check hits `http://localhost:8001/api/v1/platform/health`. Once it returns 200, SAM is ready.
+  The container exposes two ports:
+  - **8000** — SAM UI and the Gateway API (agent requests go here)
+  - **8001** — Platform API (health, config, deployment)
+
+  The health check hits `http://localhost:8001/api/v1/platform/health`. Once it returns 200, SAM is ready.
+
+### If running SAM Desktop: update the configuration settings
+1. Open ~/.sam/settings.yaml
+  ```
+  vi ~/.sam/settings.yaml
+  ```
+1. Make sure your configuration is set as follows
+  ```
+  llm:
+    provider: openai
+    api_key: sk-
+    base_url: https://lite-llm.mymaas.net/
+    default_model: claude-sonnet-4-6
+  ```
 
 ## The New SAM Architecture
 
@@ -312,10 +329,14 @@ This caused:
 
 ---
 
-### Back to Workshop Exercise
+## Back to Workshop Exercise
 
-With the environment running, apply the workshop manifest by prompting CC to apply the dev manifest to the local running instance of SAM and verify your agent is live:
+With the environment running, apply the workshop manifest by prompting CC to apply the dev manifest to the local running instance of SAM and verify your agent is live.
 
-Then open the SAM UI at `http://localhost:8000` and start a conversation with `workshop-agent`.
+```
+Using the sam cli, apply the dev manifast 
+```
+
+Then open the SAM UI at `http://localhost:8000` and start a conversation with `sam`.
 
 Once you are comfortable with the basics, use `sam skill install` and ask Claude Code to help you extend the agent — add tools, change the system prompt, or wire up a connector.

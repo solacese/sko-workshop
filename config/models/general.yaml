@@ -4,7 +4,7 @@ description: Default general-purpose model
 spec:
   apiBase: https://lite-llm.mymaas.net/
   authConfig:
-    api_key: ${MODEL_GENERAL_API_KEY}
+    api_key: ${LLM_SERVICE_API_KEY}
     type: apikey
   modelName: openai/claude-sonnet-4-6
   provider: custom
