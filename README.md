@@ -15,7 +15,7 @@ the session.
 ## Environment Setup
 
 ### Prerequisites
-All required executables are under the [resources](./resources) dir
+All required executables will be shared the day of the workshop
 
 Before starting, make sure you have the following:
 
@@ -30,17 +30,17 @@ Before starting, make sure you have the following:
     
     ```bash
     # MacOS
-    ln -sf "sam-enterprise-darwin-arm64" "$HOME/go/bin/sam"
+    ln -sf "sam-enterprise" "$HOME/go/bin/sam"
     ```
 
     ```bash
     # Linux / WSL
-    ln -sf "sam-enterprise-linux-amd64" "$HOME/go/bin/sam"
+    ln -sf "sam-enterprise" "$HOME/go/bin/sam"
     ```
 
     ```bash
-    # Windows
-    ln -sf "sam-enterprise-windows-amd64.exe" "$HOME/go/bin/sam"
+    # Windows from cmd.ex
+    echo @"%USERPROFILE%\sam-enterprise-windows-amd64.exe" %* > "%GOPATH%\bin\sam.cmd"
     ```
 
     > Note: You can replace `"$HOME/go/bin/sam"` with your $PATH bin 
@@ -52,18 +52,6 @@ Before starting, make sure you have the following:
 
 If not already, get the solace broker running locally
 
-**For Windows and Linux users:**
-
-```
-docker run -d -p 8080:8080 -p 55555:55555 -p 8008:8008 -p 1883:1883 -p 5672:5672 -p 9000:9000 -p 2222:2222 --shm-size=1g --env username_admin_globalaccesslevel=admin --env username_admin_password=admin --name=solace solace/solace-pubsub-standardCopy
-```
-
-**For macOS users:**
-
-```
-docker run -d -p 8080:8080 -p 55554:55555 -p 8008:8008 -p 1883:1883 -p 5672:5672 -p 9000:9000 -p 2222:2222 --shm-size=1g --env username_admin_globalaccesslevel=admin --env username_admin_password=admin --name=solace solace/solace-pubsub-standardCopy
-```
-
 The SAM container must reach the Solace broker by container name (`solace`). Both must be on the same Docker bridge network:
 
 ```bash
@@ -72,18 +60,13 @@ docker network create sam-network
 
 # If your Solace broker container is already running, connect it
 docker network connect sam-network solace
-
-# Verify
-docker network inspect sam-network --format '{{range .Containers}}{{.Name}} {{end}}'
 ```
 
 ## Getting Started
 
 Follow the guides in the guides directory, starting with
-[Getting Started](guides/100_Getting_Started.md).
 
-## ADLC Guides
-
+1. [Getting Started](guides/100_Getting_Started.md)
 1. [Hiring](guides/200_Hiring.md)
 2. [Onboarding](guides/300_Onboarding.md)
 3. [Coaching](guides/400_Coaching.md)
