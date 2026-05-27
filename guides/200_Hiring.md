@@ -42,26 +42,26 @@ The prompt below asks Claude Code to write the YAML configuration for five speci
 Copy and paste the following prompt into Claude Code:
 
 ---
+```
+Using the sam cli, create a folder structure that adheres to the solace agent mesh conventions for a local manifest with no authentication. Then add the following agents that leverage the built in tools. Do not apply anything yet
+Agents to create:
 
-> Using the sam cli, create a folder structure that adheres to the solace agent mesh conventions for a local manifest with no authentication. Then add the following agents that leverage the built in tools. Do not apply anything yet
-> **Agents to create:**
->
-> **1. Web Researcher**
-> Role: Web research specialist. Searches the internet, fetches page content, synthesizes findings into structured summaries, and saves results as Markdown artifacts with full source citations.
-> Guardrails: Only reports verifiable information from fetched sources. Never fabricates citations. Declares uncertainty when sources conflict. Does not attempt to access authenticated or private URLs.
->
-> **2. Data analyst**
-> Role: Structured data analysis specialist. Accepts CSV, JSON, and YAML data artifacts and produces SQL-driven insights, statistical summaries, JMESPath-filtered views, and charts.
-> Guardrails: Only analyzes data explicitly provided or loaded as an artifact. Never invents data points or fills gaps with assumptions. Always describes the dataset structure before drawing conclusions.
->
-> **3. Image Analyst**
-> Role: Visual intelligence specialist. Describes and interprets image content in detail, generates new images from text prompts, and transcribes or interprets audio files.
->
-> **4. Diagram Generator**
-> Role: Technical diagramming and document conversion specialist. Generates Mermaid diagram source code wrapped in properly fenced code blocks, and converts uploaded documents (PDF, DOCX, XLSX, HTML, CSV) to Markdown artifacts for further processing.
-> Guardrails: Always shows Mermaid source alongside an explanation of the diagram structure. Uses descriptive node labels. Asks for clarification on diagram intent before generating. Does not attempt to render or execute embedded code in converted documents.
-> Agent card: one skill — "Diagramming and Document Conversion" — describing the ability to produce Mermaid diagrams and convert office documents to Markdown.
->
+1. Web Researcher
+Role: Web research specialist. Searches the internet, fetches page content, synthesizes findings into structured summaries, and saves results as Markdown artifacts with full source citations.
+Guardrails: Only reports verifiable information from fetched sources. Never fabricates citations. Declares uncertainty when sources conflict. Does not attempt to access authenticated or private URLs.
+
+2. Data analyst
+Role: Structured data analysis specialist. Accepts CSV, JSON, and YAML data artifacts and produces SQL-driven insights, statistical summaries, JMESPath-filtered views, and charts.
+Guardrails: Only analyzes data explicitly provided or loaded as an artifact. Never invents data points or fills gaps with assumptions. Always describes the dataset structure before drawing conclusions.
+
+3. Image Analyst
+Role: Visual intelligence specialist. Describes and interprets image content in detail, generates new images from text prompts, and transcribes or interprets audio files.
+
+4. Diagram Generator
+Role: Technical diagramming and document conversion specialist. Generates Mermaid diagram source code wrapped in properly fenced code blocks, and converts uploaded documents (PDF, DOCX, XLSX, HTML, CSV) to Markdown artifacts for further processing.
+Guardrails: Always shows Mermaid source alongside an explanation of the diagram structure. Uses descriptive node labels. Asks for clarification on diagram intent before generating. Does not attempt to render or execute embedded code in converted documents.
+Agent card: one skill — "Diagramming and Document Conversion" — describing the ability to produce Mermaid diagrams and convert office documents to Markdown.
+```
 
 ---
 
@@ -85,9 +85,9 @@ Lets apply those agent declaratively
 
 Copy and paste the following prompt into Claude Code:
 
----
-
-> Update my manifest with the agents and apply
+```
+Update my manifest with the agents and apply
+```
 
 ---
 
