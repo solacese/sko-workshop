@@ -19,22 +19,17 @@ All required executables will be shared the day of the workshop
 
 Before starting, make sure you have the following:
 
-1. The `sam-enterprise` Docker image loaded locally (`docker images | grep sam-enterprise`)
+1. SAM Desktop executable: SolaceAgentMesh.dmg or sam-desktop-enterprise.exe
+1. OR The `sam-enterprise` Docker image loaded locally
     ```
     docker load -i sam-enterprise-latest.tar.gz
     ```
-    > Note: You can use SAM Desktop instead
 1. Docker with a running Solace broker container attached to the `sam-network` bridge network
     > Note: You can use Solace Cloud instead
 1. SAM cli installed and placed in your bin executable
     
     ```bash
-    # MacOS
-    ln -sf "sam-enterprise" "$HOME/go/bin/sam"
-    ```
-
-    ```bash
-    # Linux / WSL
+    # MacOS / Linux / WSL
     ln -sf "sam-enterprise" "$HOME/go/bin/sam"
     ```
 
