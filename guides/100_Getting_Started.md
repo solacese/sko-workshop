@@ -326,7 +326,7 @@ This caused:
 
 ---
 
-## Back to Workshop Exercise
+## Back to Workshop Exercise [Skip if running from scratch]
 
 With the environment running, apply the workshop manifest by prompting CC to apply the dev manifest to the local running instance of SAM and verify your agent is live.
 
@@ -337,3 +337,6 @@ Using the sam cli, apply the dev manifast
 Then open the SAM UI at `http://localhost:8000` and start a conversation with `sam`.
 
 Once you are comfortable with the basics, use `sam skill install` and ask Claude Code to help you extend the agent — add tools, change the system prompt, or wire up a connector.
+
+## Hiring
+[Get started with Hiring phase](./200_Hiring.md)
