@@ -24,15 +24,28 @@ Before starting, make sure you have the following:
         ```bash
         xattr -cr /Applications/Solace\ Agent\ Mesh.app
         ```
+        ![intro](./guides/img/intro.png)
+
+        Follow the steps to configure SAM Desktop:
+        - Get Started
+        - Configure a model now
+        - Enter LiteLLM key
+        - Choose `Custom` as service type
+        - Put `https://lite-llm.mymaas.net/` as endpoint
+        - Choose `claude-sonnet-4-6` as the model
+        - Test connection and make sure you get a success
+        - Choose built-in sandbox
+
+        ![intro](./guides/img/complete_desktop_config.png)
+
     1. OR The `sam-enterprise` Docker image loaded locally
         ```
         docker load -i sam-enterprise-latest.tar.gz
+        docker compose up
         ```
-1. [Optional] Solace Broker
-    1. Docker with a running Solace broker container attached to the `sam-network` bridge network
-        > Note: You can use Solace Cloud instead
 1. SAM cli installed in a dedicated dir
-    > Note: make sure you do not have any `sam` command installed in your system
+    > Note: make sure you do not have any `sam` command installed on your system
+    > To confirm, open a terminal session and just type `sam` you should see no command found
     
     ```bash
     # MacOS / Linux / WSL
@@ -49,6 +62,10 @@ Before starting, make sure you have the following:
     ```
 1. A LiteLLM API token
 1. Claude Code installed (`claude --version`)
+1. [Optional] Solace Broker
+    1. Docker with a running Solace broker container attached to the `sam-network` bridge network
+    
+    1. OR you can use Solace Cloud instead
 
 ### If using Docker solace broker: Add the Solace Broker to the Docker Network
 
