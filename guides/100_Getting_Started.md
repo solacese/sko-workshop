@@ -7,6 +7,8 @@ Welcome to the SKO workshop. This guide walks you through standing up your local
 ## Table of Contents
 
 - [Update .env](#update-env)
+- [Create directory](#create-a-working-directory)
+- [Install the SAM skills](#install-the-SAM-skills)
 - [Start the SAM Stack](#start-the-sam-stack)
 - [The New SAM Architecture](#the-new-sam-architecture)
   - [Component Overview](#component-overview)
@@ -27,6 +29,15 @@ Welcome to the SKO workshop. This guide walks you through standing up your local
     cp .env_example .env
     ```
 1. Update the necessary vars
+
+## Create a working directory
+
+```bash
+mkdir sko_bootcamp
+cd sko_bootcamp
+# open in VSCode
+code .
+```
 
 ## Install the SAM skills
 
@@ -53,20 +64,6 @@ sam skill check
   - **8001** — Platform API (health, config, deployment)
 
   The health check hits `http://localhost:8001/api/v1/platform/health`. Once it returns 200, SAM is ready.
-
-### If running SAM Desktop: update the configuration settings
-1. Open ~/.sam/settings.yaml
-  ```
-  vi ~/.sam/settings.yaml
-  ```
-1. Make sure your configuration is set as follows
-  ```
-  llm:
-    provider: openai
-    api_key: sk-
-    base_url: https://lite-llm.mymaas.net/
-    default_model: claude-sonnet-4-6
-  ```
 
 ## The New SAM Architecture
 
