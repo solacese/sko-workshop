@@ -22,7 +22,7 @@ Before starting, make sure you have the following:
     1. SAM Desktop executable: SolaceAgentMesh.dmg or sam-desktop-enterprise.exe
         > Note: On MacOS, after installing the dmg execute the following
         ```bash
-        xattr -cr Solace\ Agent\ Mesh.app
+        xattr -cr /Applications/Solace\ Agent\ Mesh.app
         ```
     1. OR The `sam-enterprise` Docker image loaded locally
         ```
