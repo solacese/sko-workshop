@@ -37,6 +37,9 @@ Before starting, make sure you have the following:
     ```bash
     # MacOS / Linux / WSL
     cd <path_to_cli_dir>
+    mv sam-desktop-enterprise sam
+    chmod +ux sam
+    xattr -cr sam
     export PATH=$PATH:$PWD
     # Open new terminal and confirm sam -v works
     ```
