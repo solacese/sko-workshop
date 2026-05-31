@@ -29,12 +29,13 @@ CreateModelConfigRequest is the request body for POST /models.
 
 ```yaml
 kind: model
-alias: example_model
-provider: "openai"
-modelName: "gpt-4o"
-# optional: apiBase: ""
-authConfig: {}
-# optional: modelParams: {}
 # optional: description: "Example model description (replace me)."
-# optional: maxInputTokens: 1
+spec:
+  alias: example_model
+  provider: "openai"
+  modelName: "gpt-4o"
+  # optional: apiBase: ""
+  authConfig: {}
+  # optional: modelParams: {}
+  # optional: maxInputTokens: 1
 ```

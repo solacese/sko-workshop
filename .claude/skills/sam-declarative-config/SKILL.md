@@ -1,7 +1,7 @@
 ---
 name: sam-declarative-config
 description: Author SAM declarative-config repos (manifests, per-kind YAML, skills) and drive sam config plan/apply/pull/migrate. Auto-generated from the live DTO + type schemas at the bundled CLI version; re-run `sam skill install --force` after a CLI upgrade.
-version: main-v2.16.1-151-g2182b803-dirty
+version: main-v2.35.0-158-gf7cabbfa
 ---
 
 # SAM Declarative Config

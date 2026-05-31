@@ -36,6 +36,8 @@ WorkflowConfig is the parsed top-level workflow definition.
 | `nodes` | `[]*NodeConfig` | (no description) |
 | `output_mapping` | `map[string]any` | (no description) |
 | `skills` | `[]map[string]any` | (no description) |
+| `tools` | `[]any` | Tools is the raw `tools:` list (one entry per declarative tool config), in the same shape agents accept. Populated by the loader from the app_config level. Workflow tool nodes can invoke any tool registered here. Connector-produced tools share the same namespace. |
+| `connectors` | `[]any` | Connectors is the raw `connectors:` list (one entry per connector instance), in the same shape agents accept. Each entry is built by connector.DefaultRegistry().Build at workflow Init; the resulting tool is registered into the same tool.Set as `tools:` entries. |
 | `workflow_timeout` | `time.Duration` | Timeouts. |
 | `default_node_timeout` | `time.Duration` | (no description) |
 | `card_publish_interval_seconds` | `int` | Agent card publishing. |
@@ -55,7 +57,7 @@ Agent node fields.
 | Field | Type | Required | Description |
 |---|---|---|---|
 | `id` | `string` |  | (no description) |
-| `type` | `string` |  | "agent", "switch", "map", "loop", "workflow" |
+| `type` | `string` |  | "agent", "switch", "map", "loop", "workflow", "tool" |
 | `depends_on` | `[]string` |  | node IDs this node depends on |
 | `when` | `string` |  | (no description) |
 | `timeout` | `time.Duration` |  | (no description) |
@@ -73,7 +75,7 @@ Loop node fields.
 | Field | Type | Required | Description |
 |---|---|---|---|
 | `id` | `string` |  | (no description) |
-| `type` | `string` |  | "agent", "switch", "map", "loop", "workflow" |
+| `type` | `string` |  | "agent", "switch", "map", "loop", "workflow", "tool" |
 | `depends_on` | `[]string` |  | node IDs this node depends on |
 | `body_node` | `string` |  | (no description) |
 | `condition` | `string` |  | (no description) |
@@ -87,7 +89,7 @@ Map node fields.
 | Field | Type | Required | Description |
 |---|---|---|---|
 | `id` | `string` |  | (no description) |
-| `type` | `string` |  | "agent", "switch", "map", "loop", "workflow" |
+| `type` | `string` |  | "agent", "switch", "map", "loop", "workflow", "tool" |
 | `depends_on` | `[]string` |  | node IDs this node depends on |
 | `items_expression` | `any` |  | (no description) |
 | `template_node` | `string` |  | target node ID for map body |
@@ -101,10 +103,21 @@ Switch node fields.
 | Field | Type | Required | Description |
 |---|---|---|---|
 | `id` | `string` |  | (no description) |
-| `type` | `string` |  | "agent", "switch", "map", "loop", "workflow" |
+| `type` | `string` |  | "agent", "switch", "map", "loop", "workflow", "tool" |
 | `depends_on` | `[]string` |  | node IDs this node depends on |
 | `cases` | `[]SwitchCase` |  | (no description) |
 | `default_case` | `string` |  | (no description) |
+
+## node type: tool
+
+Tool node fields. ToolName names a tool registered in the workflow's tool.Set — either declared in `tools:` or produced by a connector in `connectors:`. Tools and connectors share a single namespace.
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `id` | `string` |  | (no description) |
+| `type` | `string` |  | "agent", "switch", "map", "loop", "workflow", "tool" |
+| `depends_on` | `[]string` |  | node IDs this node depends on |
+| `tool_name` | `string` |  | (no description) |
 
 ## node type: workflow
 
@@ -113,7 +126,7 @@ Workflow invoke fields.
 | Field | Type | Required | Description |
 |---|---|---|---|
 | `id` | `string` |  | (no description) |
-| `type` | `string` |  | "agent", "switch", "map", "loop", "workflow" |
+| `type` | `string` |  | "agent", "switch", "map", "loop", "workflow", "tool" |
 | `depends_on` | `[]string` |  | node IDs this node depends on |
 | `when` | `string` |  | (no description) |
 | `timeout` | `time.Duration` |  | (no description) |
@@ -121,4 +134,5 @@ Workflow invoke fields.
 | `input` | `map[string]any` |  | (no description) |
 | `instruction` | `string` |  | (no description) |
 | `workflow_name` | `string` |  | (no description) |
+| `tool_name` | `string` |  | (no description) |
 

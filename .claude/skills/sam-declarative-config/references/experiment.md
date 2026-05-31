@@ -42,11 +42,12 @@ CreateExperimentRequest is the body for POST /eval/experiments.
 kind: experiment
 name: example_experiment
 # optional: description: "Example experiment description (replace me)."
-datasetId: ""
-targetAgent: ""
-# optional: models: []  # see schema for element shape
-# optional: runsPerExample: 1
-# optional: maxWorkers: 1
-# optional: evaluatorIds: []
-# optional: primaryEvaluatorId: ""
+spec:
+  datasetId: ""
+  targetAgent: ""
+  # optional: models: []  # see schema for element shape
+  # optional: runsPerExample: 1
+  # optional: maxWorkers: 1
+  # optional: evaluatorIds: []
+  # optional: primaryEvaluatorId: ""
 ```

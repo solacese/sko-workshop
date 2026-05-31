@@ -119,7 +119,7 @@ CreateAgentRequest is the request body for POST /agents.
 | `inputModes` | `[]string` | yes |  | (no description) |
 | `outputModes` | `[]string` | yes |  | (no description) |
 | `modelProvider` | `[]string` |  |  | (no description) |
-| `additionalConfigurations` | `json.RawMessage` |  |  | AdditionalConfigurations is a JSON-object catch-all for agent config keys the structured DTO does not yet model (e.g. supports_streaming, agent_card_publishing.interval_seconds, per-tool tool_config blocks). Tier-1 structural validation (size, depth, top-level key collisions) runs at create/update time; deeper schema-driven validation is a follow-up. Authored values are deep-merged into the deploy-time YAML. |
+| `additionalConfigurations` | `json.RawMessage` |  |  | AdditionalConfigurations is a JSON-object catch-all for agent config keys the structured DTO does not yet model (e.g. supports_streaming, agent_card_publishing.interval_seconds). Tier-1 structural validation (size, depth, top-level key collisions) runs at create/update time; deeper schema-driven validation is a follow-up. Authored values are deep-merged into the deploy-time YAML. Blocked keys (owned by the platform's YAML emitter; rejected with HTTP 422 if set): `tools` — computed from spec.toolsets at deploy time. |
 | `deploy` | `bool` | yes |  | (no description) |
 
 ## Example
@@ -128,19 +128,20 @@ CreateAgentRequest is the request body for POST /agents.
 kind: agent
 name: example_agent
 description: "Example agent description (replace me)."
-# optional: systemPrompt: "Example system prompt. Replace with the agent's real instructions. Example system prompt. Replace with the agent's real instructions. "
-# optional: type: "standard"
-skills: []  # see schema for element shape
-skillRefs: []
-skillIds: []
-toolsets: []
-# optional: toolsetExcludedTools: {}
-# optional: toolsetConfigs: []  # see schema for element shape
-# optional: skillConfigs: []  # see schema for element shape
-connectors: []
-inputModes: []
-outputModes: []
-# optional: modelProvider: []
-# optional: additionalConfigurations: null  # TODO: provide a value of type json.RawMessage
-deploy: false
+spec:
+  # optional: systemPrompt: "Example system prompt. Replace with the agent's real instructions. Example system prompt. Replace with the agent's real instructions. "
+  # optional: type: "standard"
+  skills: []  # see schema for element shape
+  skillRefs: []
+  skillIds: []
+  toolsets: []
+  # optional: toolsetExcludedTools: {}
+  # optional: toolsetConfigs: []  # see schema for element shape
+  # optional: skillConfigs: []  # see schema for element shape
+  connectors: []
+  inputModes: []
+  outputModes: []
+  # optional: modelProvider: []
+  # optional: additionalConfigurations: null  # TODO: provide a value of type json.RawMessage
+  deploy: false
 ```

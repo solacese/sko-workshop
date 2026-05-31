@@ -22,3 +22,59 @@ Once the role is defined, connect the agent to the systems and data sources it n
 
 ## Hands-on
 
+Now that your agents have defined roles, it is time to give them access to the data they need. In this exercise you will provision a PostgreSQL connector backed by a Supabase database and wire it into your manifest. This is the onboarding equivalent of handing a new employee their system credentials on day one.
+
+---
+
+## Step 1 — Add the database password to your .env
+
+The connector config will reference the password as an environment variable, not as a plain-text value. Open your `.env` file and add the following line:
+
+```
+DB_PASSWORD=thisisaverysecurepassword
+```
+
+---
+
+## Step 2 — Create the PostgreSQL connector
+
+Copy and paste the following prompt into Claude Code:
+
+```
+Create a PostgreSQL connector for my SAM project. Use the following connection string:
+
+  postgresql://postgres.hllufzsytafdylpscgif:${DB_PASSWORD}@aws-1-ap-northeast-1.pooler.supabase.com:5432/postgres
+
+The password should come from the environment variable DB_PASSWORD. Add the connector to my manifest and apply.
+```
+
+---
+
+## What just happened
+
+Claude Code generated a `kind: connector` YAML of subtype `sql/postgres` and wired it into your manifest. A few things worth noting:
+
+- **The password is never in the YAML.** The connector references `${DB_PASSWORD}`, which SAM resolves from the environment at runtime. This pattern keeps credentials out of version control and is the correct pattern for all secrets in SAM.
+- **The connector is now a named resource on the platform.** Your agents can be given access to it by referencing it in their toolset configuration in the next steps.
+- **Least privilege starts here.** The connector exposes a SQL query interface — agents that are wired to it can only read what the database user permits. Nothing broader.
+
+---
+
+## Step 3 — Create an agent that uses the connector
+
+With the connector live, wire up a dedicated database agent. Copy and paste the following prompt into Claude Code:
+
+```
+Create an agent called "store-data" that uses the postgres connector we just created. The agent should be a data specialist focused on querying and retrieving store data from the database. Add it to the manifest and apply.
+```
+
+---
+
+## What just happened
+
+A new agent was created with the PostgreSQL connector attached to its toolset. This agent can now issue SQL queries against the database as part of its reasoning loop — no separate integration code required. The connector is the only bridge between the agent and the database; the agent never holds credentials directly.
+
+---
+
+When the apply completes, the Onboarding stage is done. Your agents now have a live data connection they can query. The next stage — [Coaching](./400_Coaching.md) — is where you validate that they use it correctly before promoting to production.
+

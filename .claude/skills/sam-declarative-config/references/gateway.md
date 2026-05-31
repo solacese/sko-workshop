@@ -5,10 +5,71 @@ Manifest path: `resources.gateways`
 A gateway exposes the platform to external clients (HTTP, Slack, MS
 Teams, etc.). The `type` field is immutable after creation. The
 `values` field is a free-form object whose shape is dictated by the
-gateway type's schema — consult the gateway-runtime docs (or fetch a
+gateway type's schema — consult the per-type section below (or fetch a
 running gateway with `sam config pull --only gateway --name X`) for
 the per-type field set. `publicUrl` is optional and only meaningful
 for HTTP-style gateways.
+
+### Connection model: outbound (Socket Mode) vs inbound (webhook)
+
+Gateway types differ in *which direction* the connection runs, and this
+dictates what you must configure outside the platform:
+
+- **Outbound / Socket Mode (e.g. `slack`)** — the gateway opens an
+  outbound WebSocket to the provider using an app token. No inbound
+  endpoint, no public URL, no DNS — it works behind NAT. Just supply the
+  tokens in `values`.
+- **Inbound webhook (e.g. `teams`, HTTP-style)** — the provider POSTs to
+  a public URL the gateway exposes. You MUST register that URL on the
+  provider side (see below), and the platform host must be publicly
+  reachable.
+
+### Inbound webhook URL (the `/gw/<slug>/...` named mount)
+
+Non-root gateways are mounted under **`/gw/<slug>/`** on the platform's
+public host, where `<slug>` is the gateway's URL-stable slug (derived
+from `name` when not set explicitly; lowercase `[a-z0-9]`, dashes
+between runs). The slug is **stable across delete/recreate** — unlike the
+internal UUID, which changes each time — so a webhook/callback URL bound
+to the slug survives reprovisioning. **Never put the gateway UUID in an
+externally-registered URL; only the slug is routed** (a UUID path 404s).
+
+For a **Teams** gateway, the Bot Framework **messaging endpoint** to set
+in the Azure Bot registration's Configuration blade is therefore:
+
+```
+https://<platform-host>/gw/<slug>/api/messages
+```
+
+e.g. `https://rc-sam-go.mymaas.net/gw/teams-bot/api/messages`. You can
+sanity-check the path before wiring Azure: a `POST` to it should return
+**401** (Bot Framework auth rejecting the unsigned request) — a **404**
+means the slug/path is wrong. The slug only exists after the gateway is
+created, so the order is: apply the gateway → read its slug → set the
+provider URL.
+
+### Single-tenant vs multi-tenant (Teams)
+
+`microsoft_app_tenant_id` is **required for single-tenant Azure Bots**
+(Microsoft App Type = SingleTenant): the gateway must mint its outbound
+Bot Connector token from the bot's *home* tenant. Leave it **empty for
+multi-tenant** bots (the token comes from the shared `botframework.com`
+authority). Getting this wrong is a classic silent half-failure:
+**inbound works** (the task is submitted) but **every outbound reply
+fails** with `send activity: HTTP 401: Authorization has been denied for
+this request`, because the Connector rejects a token minted from the
+wrong authority. If you see inbound-ok / outbound-401, check the tenant
+setting and the bot's App Type first.
+
+### `default_agent_name` must be a real, deployed agent
+
+The schema default for `default_agent_name` is the literal string
+`OrchestratorAgent`. That is a placeholder, not a guarantee — it routes
+to an agent of that exact name, which often does not exist (a common
+real agent is named `Orchestrator`, not `OrchestratorAgent`). Set
+`default_agent_name` to the **exact `name:` of an agent in this same
+config** (and in the manifest's `resources.agents`), or unmatched
+messages 404 at dispatch.
 
 
 ## Wrapper schema
@@ -18,6 +79,7 @@ CreateGatewayRequest is the request body for POST /gateways.
 | Field | Type | Required | Validation | Description |
 |---|---|---|---|---|
 | `name` | `string` | yes | len 3–255 | (no description) |
+| `slug` | `string` |  | len 3–63 | (no description) |
 | `description` | `string` | yes | len 10–1000 | (no description) |
 | `type` | `string` | yes | len 2–50 | (no description) |
 | `publicUrl` | `string` |  |  | (no description) |
@@ -199,6 +261,7 @@ Expose SAM agents as Model Context Protocol tools for Claude Code, MCP Inspector
 | `serverDescription` | `string` |  |  | max len 1024 | Description reported to MCP clients in server metadata. |
 | `includeTools` | `array<object>` |  | `[]` | len 0–0 | Allowlist of tool-name patterns to expose. Empty = expose all. Patterns are exact match (case-insensitive) or regex when they contain special chars. Filters check against agent name, skill name, AND final tool name. |
 | `excludeTools` | `array<object>` |  | `[]` | len 0–0 | Denylist of tool-name patterns. Takes precedence over includeTools when both match. |
+| `corsAllowedOrigins` | `array<object>` |  | `[]` | len 0–0 | Allowlist of browser Origin values accepted from browser-based MCP clients (MCPJam, MCP Inspector). Empty = allow all (server-to-server MCP clients never trigger CORS, so wide-open is harmless for them). Required for browser clients on a different origin than the gateway — without a matching origin the browser's preflight OPTIONS is blocked. Typical local-dev values: http://127.0.0.1:3010 (MCPJam), http://localhost:6274 (MCP Inspector). |
 
 ### Example
 
@@ -218,6 +281,7 @@ spec:
     # optional: serverDescription: "..."
     # optional: includeTools: null  # TODO: provide a value of type array<object>
     # optional: excludeTools: null  # TODO: provide a value of type array<object>
+    # optional: corsAllowedOrigins: null  # TODO: provide a value of type array<object>
 ```
 
 ## type: slack

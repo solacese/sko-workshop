@@ -727,6 +727,246 @@ The skill body can name the resulting tools (`<toolset>__<tool>`,
 double-underscore separator — see [skill design](../design/skill-design.md))
 as prompt guidance, but the toolset itself is wired on the agent.
 
+## Python tool authoring
+
+Python tools are written against the `sam-tool-sdk` package (resolved from
+PyPI via `pyproject.toml`, not vendored). This section is the Python
+counterpart to the Go authoring guidance above — same concepts (`OK` /
+`Error`, inline data vs artifacts, config schema, timeouts), expressed in
+the Python API.
+
+### Entry point: `tool_cli`
+
+A function-based tool is a plain function (sync or async) wrapped with
+`tool_cli`, exposed as a console script. STR runs the script with `--schema`
+at discovery time and with a `runner_args.json` path at invocation time —
+`tool_cli` handles both.
+
+```python
+# weather_tool.py
+from sam_tool_sdk import tool_cli, ToolResult, SandboxToolContextFacade
+
+
+async def get_weather(city: str, units: str = "metric", ctx: SandboxToolContextFacade = None) -> ToolResult:
+    """Look up the current weather for a city.
+
+    Args:
+        city: the city to look up
+        units: "metric" or "imperial"
+    """
+    if ctx is not None:
+        ctx.send_status(f"Fetching weather for {city}...")
+    # ... call a weather API ...
+    return ToolResult.ok(message=f"Weather for {city}", data={"tempC": 21})
+
+
+cli = tool_cli(get_weather)
+```
+
+```toml
+# pyproject.toml
+[project]
+name = "sam-tool-weather"
+version = "0.1.0"
+dependencies = ["sam-tool-sdk>=0.1,<0.2"]
+
+[project.scripts]
+weather = "weather_tool:cli"          # manifest executable: python/bin/weather
+```
+
+### Schema derivation from type hints
+
+`tool_cli` builds the tool's JSON schema by introspecting the function
+signature — you do **not** hand-write the schema for function tools:
+
+- Each annotated parameter becomes a schema property. Supported types:
+  `str` → string, `int` → integer, `float` → number, `bool` → boolean,
+  `list[X]` → array, `dict` → object, and nested `TypedDict` /
+  `@dataclass` / pydantic `BaseModel` → nested object schemas.
+- A parameter with a default value is **optional**; one without is
+  **required** (the Python analog of Go's pointer / `,omitempty` rule).
+- Per-parameter descriptions come from the docstring's `Args:` block.
+- A parameter annotated `SandboxToolContextFacade` is **injected by the
+  framework**, not exposed to the LLM — name it whatever you like.
+- A parameter annotated `Artifact` (or `list[Artifact]`) is pre-loaded by
+  STR before the call (see Artifacts below).
+
+When inference isn't enough (dynamic enums, runtime-computed shapes), use
+`@with_dynamic_schema(fn)` to supply the schema explicitly, the same
+escape hatch as Go's `WithDynamicSchema`.
+
+### Returning results: `ToolResult`
+
+Handlers return `ToolResult` via a classmethod constructor — the Python
+mirror of Go's `sdk.OK` / `sdk.Error` / `sdk.Partial` / `sdk.Pending`:
+
+| Constructor | Use |
+|---|---|
+| `ToolResult.ok(message, data=, data_objects=)` | success |
+| `ToolResult.error(message, error_code=)` | failure the LLM should see |
+| `ToolResult.partial(message, data=, data_objects=)` | partial success |
+| `ToolResult.pending(message, ...)` | long-running / deferred |
+| `ToolResult.auth_required(message, ...)` | tool needs credentials first |
+
+Returning a plain `dict` is also accepted (legacy-compatible) but
+`ToolResult` is preferred — it's the only way to attach artifacts.
+
+`data=` is **inline** — spread into the JSON the LLM sees every turn, so
+keep it to small scalar summaries (the Python analog of `WithData`).
+`data_objects=` is for **bulky/binary payloads** the agent may store as
+versioned artifacts (`WithDataObjects`):
+
+```python
+from sam_tool_sdk import ToolResult, DataObject, DataDisposition
+
+return ToolResult.ok(
+    message="Generated report",
+    data={"rowCount": 1042},                       # inline scalar summary
+    data_objects=[
+        DataObject(
+            name="report.csv",
+            content=csv_bytes,
+            mime_type="text/csv",
+            disposition=DataDisposition.ARTIFACT,   # AUTO / ARTIFACT / INLINE / ARTIFACT_WITH_PREVIEW
+            description="Full report",
+        )
+    ],
+)
+```
+
+`DataDisposition` semantics match the Go `Disposition` table above:
+`AUTO` (framework decides by size/binary), `ARTIFACT` (always store),
+`INLINE` (always return to the LLM), `ARTIFACT_WITH_PREVIEW` (store +
+short preview string).
+
+### The context facade
+
+A `SandboxToolContextFacade`-typed parameter gives the tool runtime
+access:
+
+- `ctx.send_status(text)` — emit a streaming status line to the user.
+- `ctx.call_llm(system_prompt, user_prompt, temperature=)` — call back to
+  the agent's LLM (synchronous; raises `IPCError` if STR provided no IPC
+  socket for this invocation).
+- `await ctx.load_artifact(filename, version=, as_text=)` and
+  `await ctx.list_artifacts()` are async; `ctx.save_artifact(name, content,
+  ...)` is synchronous.
+- `ctx.get_config(key, default)` — read resolved operator config.
+- `ctx.session_id`, `ctx.user_id`, `ctx.app_name`, `ctx.task_id`.
+
+Note: `ctx.send_signal(...)` is **not supported** in the STR sandbox and
+raises — use `send_status` for user-visible progress.
+
+### Artifacts as parameters
+
+Annotate a parameter `Artifact` to have STR pre-load the named artifact's
+bytes before your function runs:
+
+```python
+from sam_tool_sdk import Artifact, ToolResult
+
+async def summarize(doc: Artifact) -> ToolResult:
+    """Summarize an uploaded document."""
+    text = doc.as_text()                       # bytes already loaded by STR
+    return ToolResult.ok(message=f"Summarized {doc.filename}", data={"chars": len(text)})
+```
+
+### Operator config: `@with_config_schema`
+
+Declare config the operator supplies (API keys, endpoints) — rendered as
+a form by the platform, validated at deploy time. Wire-compatible with
+Go's `ConfigSchemaField`:
+
+```python
+from sam_tool_sdk import with_config_schema, ConfigSchemaField
+
+@with_config_schema([
+    ConfigSchemaField(key="api_token", type="string", required=True, secret=True),
+    ConfigSchemaField(key="endpoint", type="string"),
+])
+async def call_api(tool_config, query: str) -> ToolResult:
+    token = tool_config["api_token"]           # injected; precedence: agent > toolset > schema default
+    ...
+```
+
+### Timeouts and volumes
+
+```python
+from sam_tool_sdk import tool_timeout, with_volume_params, VolumeParam
+
+@tool_timeout(seconds=120)                                       # per-invocation timeout
+@with_volume_params([VolumeParam(name="scratch", mount_path="/scratch")])
+async def long_job(ctx=None) -> ToolResult:
+    path = ctx.get_volume_mount_path("/scratch")    # keyed by mount_path, not name
+    ...
+```
+
+### Class-based and provider tools
+
+For multiple related tools or full control over the schema, subclass
+`DynamicTool` (one tool) or `DynamicToolProvider` + `@register_tool`
+(many). A `DynamicTool` hand-writes `parameters_schema` as a JSON Schema
+dict:
+
+```python
+from sam_tool_sdk import DynamicTool, DynamicToolProvider, ToolResult
+
+class CountWords(DynamicTool):
+    @property
+    def tool_name(self): return "count_words"
+    @property
+    def tool_description(self): return "Count words in text."
+    @property
+    def parameters_schema(self):
+        return {"type": "object",
+                "properties": {"text": {"type": "string"}},
+                "required": ["text"]}
+    async def _run_async_impl(self, args, tool_context=None, credential=None):
+        return ToolResult.ok(message="counted", data={"n": len(args["text"].split())})
+
+# provider — many tools from one class, each via @register_tool
+class MathTools(DynamicToolProvider):
+    def create_tools(self, tool_config=None): return []   # decorated tools auto-included
+
+@MathTools.register_tool
+async def add(self, a: float, b: float) -> dict:
+    """Add two numbers."""
+    return {"sum": a + b}
+```
+
+Wrap the class/provider for the console script with `dynamic_tool_cli(...)`
+or `provider_cli(...)` instead of `tool_cli(...)`.
+
+### Migrating an existing Python SAM tool
+
+A tool written for the full `solace_agent_mesh` package needs a small,
+mechanical rewrite — typically 30–60 minutes, no logic redesign:
+
+1. **Imports** — `from solace_agent_mesh.agent.tools.dynamic_tool import
+   DynamicTool` → `from sam_tool_sdk import DynamicTool`. Same for
+   `ToolResult`, `DataObject`, etc. There is no compatibility shim; the
+   import path must change.
+2. **`parameters_schema`** — return a plain JSON Schema dict instead of a
+   `google.genai.types.Schema` object:
+   ```python
+   # old
+   return adk_types.Schema(type=adk_types.Type.OBJECT,
+                           properties={"q": adk_types.Schema(type=adk_types.Type.STRING)},
+                           required=["q"])
+   # new
+   return {"type": "object", "properties": {"q": {"type": "string"}}, "required": ["q"]}
+   ```
+3. **Context** — `ToolContextFacade` → `SandboxToolContextFacade`. Method
+   names (`send_status`, `load_artifact`, `get_config`, …) are unchanged.
+   The one behavioral change: `send_signal(...)` now raises rather than
+   delivering — switch signal-based progress to `send_status`.
+4. **Returns** — a tool that returned a raw `dict` keeps working; adopt
+   `ToolResult` only if you want artifact handling.
+
+The on-disk/runner contract (`runner_args.json`, `result.json`, status
+pipe) is unchanged, so once imports + schema are updated and the tool is
+repackaged into the Lambda-Layer layout, the Go STR runs it unmodified.
+
 ## Cross-platform notes
 
 - Mac/Linux toolsets that don't need Windows can ship just `build.sh`.
@@ -736,17 +976,24 @@ as prompt guidance, but the toolset itself is wired on the agent.
   shell scripts because the resolver invokes the language toolchain
   directly via `os/exec`.
 
-## Cross-compile target (Go toolsets)
+## Cross-compile target
 
 The deployed STR is almost always a different architecture from the
 author's dev machine. `sam config apply` handles this automatically for
-Go-convention toolsets by querying
-`GET /api/v1/platform/toolsets/buildTarget` and cross-compiling for the
-returned `(GOOS, GOARCH)`. Resolution order:
+**both Go and Python** convention toolsets by querying
+`GET /api/v1/platform/toolsets/buildTarget` and building for the returned
+`(GOOS, GOARCH)`. Resolution order:
 
 1. `SAM_TOOL_TARGET_OS` / `SAM_TOOL_TARGET_ARCH` env vars (explicit pin wins).
 2. Platform endpoint (the STR's actual runtime).
 3. `linux/arm64` fallback if the platform is unreachable.
+
+Go convention cross-compiles via `GOOS`/`GOARCH`/`CGO_ENABLED=0`. Python
+convention passes the equivalent pip flags
+(`--platform manylinux2014_aarch64`, `--python-version`,
+`--only-binary=:all:`) so a Mac build laptop produces manylinux wheels
+the linux STR can load. Pure-Python tools with no compiled deps are
+arch-independent either way.
 
 A mixed-fleet response (multiple distinct STR architectures online) is a
 hard apply error citing the observed targets — pin one explicitly via

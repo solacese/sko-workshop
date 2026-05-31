@@ -37,8 +37,9 @@ CreateEvaluatorRequest is the body for POST /eval/evaluators.
 kind: evaluator
 name: example_evaluator
 description: "Example evaluator description (replace me)."
-# optional: type: "standard"
-# optional: model: ""
-# optional: promptTemplate: ""
-# optional: choiceScores: {}
+spec:
+  # optional: type: "standard"
+  # optional: model: ""
+  # optional: promptTemplate: ""
+  # optional: choiceScores: {}
 ```

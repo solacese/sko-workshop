@@ -12,6 +12,15 @@
 - **Floating refs in production.** Sources without a pinned ref
   (branch, short SHA, HEAD) require `--allow-floating-refs` and make
   apply non-reproducible. Pin to a tag or full SHA.
+- **Panicking at `plan` deletes on a partial manifest.** `plan` always
+  diffs the *whole* platform against the manifest, so a focused manifest
+  that lists only one resource shows every other resource as `- delete`.
+  That is display-only: `apply` performs creates/updates but **skips
+  deletes unless you pass `--prune`** (you'll see `skipped (use --prune
+  to delete)`). This is exactly what makes selective single-resource
+  manifests safe — apply without `--prune` and the rest of the platform
+  is untouched. Only reach for `--prune` with a full manifest that is
+  genuinely the complete desired state.
 - **Skill files vs directories.** A `skills:` resource entry points
   at a directory under `skills/<name>/`, not a YAML file. The
   directory must contain a SKILL.md.

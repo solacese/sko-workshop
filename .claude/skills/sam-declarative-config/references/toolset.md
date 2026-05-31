@@ -6,7 +6,44 @@ A toolset is a discoverable collection of tools (Python or Go binaries)
 that agents can call. The metadata (name, description, shared config)
 lives in YAML; the actual tool code lives in a per-toolset directory
 under the same `toolsets/` tree. Built-in toolsets do not need a YAML
-entry — list them under `toolsets:` on the agent that uses them.
+entry — list them by ID under `spec.toolsets:` on the agent that uses them.
+
+## Built-in toolset IDs
+
+Built-in toolsets are pre-installed on every platform instance. Reference
+them by their platform ID in `spec.toolsets:` on the agent — no toolset
+YAML file is needed. Use `sam api GET /api/v1/platform/toolsets` to get
+the live list for your instance.
+
+| ID | Description |
+|---|---|
+| `builtin_artifact_tools` | Create, read, update, and manage artifacts |
+| `builtin_web_request_tools` | HTTP GET/POST/PUT/DELETE requests + Google search |
+| `builtin_research_tools` | Iterative multi-step web research + Google search |
+| `builtin_image_tools` | Describe, generate, and edit images; describe audio |
+| `builtin_file_tools` | Convert PDF, DOCX, XLSX, HTML, CSV, PPTX to Markdown |
+| `builtin_time_tools` | Get current time and date |
+| `hil_tools` | Human-in-the-loop: `ask_user_question` |
+| `data_analysis` | SQL queries, JMESPath transforms, SQLite, structured merge |
+
+```yaml
+# agents/my-agent.yaml
+kind: agent
+name: my-agent
+description: "Agent that searches the web and manages artifacts."
+spec:
+  toolsets:
+    - builtin_research_tools
+    - builtin_artifact_tools
+    - hil_tools
+  ...
+```
+
+> **Common mistake:** the group name aliases used in the runtime tool-config
+> schema (`research`, `artifact_management`, `web_tools`, `image_tools`, etc.)
+> are **not** valid `spec.toolsets:` values. Use the platform IDs above.
+> Using an alias causes a plan-time error:
+> `toolset "artifact_management" not found on platform`.
 
 ## On-disk layout
 
@@ -71,7 +108,13 @@ tool directory under `toolsets/<name>/src/`.
   into the deployment-target Lambda Layer via `pip install --target`.
 
 See `references/tool-build.md` § "Scaffolding a new tool" for
-path-resolution rules and language-specific examples.
+path-resolution rules and language-specific examples. For the tool
+**authoring** API — what to write inside the tool itself — see
+`references/tool-build.md` § "Authoring pitfalls" (Go: `sdk.NewTool`,
+`sdk.OK`/`Error`, `WithData`/`WithDataObjects`) and § "Python tool
+authoring" (Python: `tool_cli`, `ToolResult.ok`/`error`,
+`SandboxToolContextFacade`, `DynamicTool`, plus the legacy-tool
+migration steps).
 
 ## Build behavior (author flow)
 
