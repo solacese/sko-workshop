@@ -24,10 +24,15 @@ Welcome to the SKO workshop. This guide walks you through standing up your local
 
 ## Update .env
 
-1. Create a .env file
+1. Create a .env file with the following basic vars
     ```
-    cp .env_example .env
+    # LLM — LiteLLM proxy at mymaas.net
+    LLM_SERVICE_ENDPOINT="https://lite-llm.mymaas.net/"
+    LLM_SERVICE_API_KEY="sk-<>"
+    LLM_SERVICE_GENERAL_MODEL_NAME="openai/claude-sonnet-4-6"
+    LLM_SERVICE_PLANNING_MODEL_NAME="openai/claude-sonnet-4-6"
     ```
+    > Note: You can just copy the example env if you cloned this repo `cp .env_example .env`
 1. Update the necessary vars
 
 ## Create a working directory
@@ -302,7 +307,7 @@ Example prompts:
 
 ### What Was Removed
 
-The previous Python SAM used the Google Agent Development Kit (ADK) as the LLM interaction and tool-calling framework. ADK pulled in a large dependency chain: `google-adk`, `solace-pubsubplus`, `onnxruntime`, `pydub`, SQLAlchemy, and more.
+The previous Python SAM used ADK as the LLM interaction and tool-calling framework. ADK pulled in a large dependency chain: `google-adk`, `solace-pubsubplus`, `onnxruntime`, `pydub`, SQLAlchemy, and more.
 
 This caused:
 - **~5 second cold import time** on every tool subprocess start (the ADK was re-imported each time)
@@ -314,24 +319,32 @@ This caused:
 
 **For the agent/workflow core:** The LLM interaction loop, tool calling semantics, and conversation management are now implemented natively in Go. This runs inside AWE with no Python dependency.
 
-**For Python tool authors:** A minimal Python package called `sam-tool-sdk` replaces the full `solace_agent_mesh` import. It has exactly one dependency: `pydantic >= 2.0`. The entire SDK is approximately 1,500 lines across five modules:
+**For Python tool authors:** A minimal Python package called `sam-tool-sdk` replaces the full `solace_agent_mesh` import. It has exactly one dependency: `pydantic >= 2.0`. 
 
-| Module | Purpose |
-|---|---|
-| `dynamic_tool.py` | Tool class definition and schema generation |
-| `tool_result.py` | Result types (text, artifact, error) |
-| `artifact_types.py` | Artifact creation and metadata |
-| `context_facade.py` | Access to session context, KV store, artifact service |
-| `tool_runner.py` | Subprocess entry point — receives invocation from STR, calls your tool, returns result |
+---
+
+## Agent Development Lifecycle
+![adlc](./img/adlc.png)
+
+The Agent Development Lifecycle (ADLC) is a six-stage framework for conceiving, building, deploying, governing, and continuously improving AI agents in the enterprise. It draws on lessons from both the software development lifecycle (SDLC) and the human employee lifecycle. Each stage addresses a distinct challenge:
+1. defining what an agent does (Hiring), giving it the right access (Onboarding),
+1. validating that it performs correctly (Coaching),
+1. maintaining human oversight (Supervision),1.
+integrating it into a team of agents (Teamwork), and
+1. keeping it improving over time (Improvement). 
+
+Every stage of the ADLC maps directly to features in Solace Agent Mesh from the agent builder and skill system that support role definition, to connectors and gateways for access provisioning, to evals and telemetry for performance monitoring.
+
+This workshop walks through every stage of the ADLC hands-on. Each guide covers what the stage means in practice and which SAM features you'll use to implement it.
 
 ---
 
 ## Back to Workshop Exercise [Skip if running from scratch]
 
-With the environment running, apply the workshop manifest by prompting CC to apply the dev manifest to the local running instance of SAM and verify your agent is live.
+With your SAM client up and running, prompt CC to scaffold a folder structure for sam
 
 ```
-Using the sam cli, apply the dev manifast 
+Using the sam cli, scaffold a folder structure for a local instance of sam desktop running on http://localhost:8000 with no authentication
 ```
 
 Then open the SAM UI at `http://localhost:8000` and start a conversation with `sam`.

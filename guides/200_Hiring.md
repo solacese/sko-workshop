@@ -1,4 +1,4 @@
-# Stage 1: Hiring — Define the Role
+# Stage 1: Hiring: Define the Role
 
 <img src="img/hiring.png" alt="Hiring" width="400"/>
 
@@ -6,20 +6,16 @@ Before writing a single line of agent configuration, define what the agent is fo
 
 ---
 
-## Solace Agent Mesh Features
+## Solace Agent Mesh Features that reflect the hiring stage
 
-- **SAM Builder Agent** — A conversational, canvas-backed UI agent that guides users through requirements gathering, architecture design, YAML config generation, and deployment — the primary no-code authoring experience for defining agent roles.
-- **AI Assistant** — An LLM-powered endpoint that generates a complete agent config from a natural-language description; the fast path for non-technical users to go from idea to deployable agent.
+- **Agent Builder** — A conversational, canvas-backed UI agent that guides users through requirements gathering, architecture design, YAML config generation, and deployment. No-code authoring experience for defining agent roles.
 - **Agent (`kind: agent`)** — The core platform resource that binds a system prompt, skills, toolsets, and model into a deployable unit; the formal definition of an agent's role and boundaries.
-- **System Prompt / Instruction** — The per-agent natural-language definition of role, expertise, scope constraints, and behavioral guardrails; validated at 100–10,000 characters.
+- **System Prompt / Instruction** — Role definition, scope constraints, and behavioral guardrails;
 - **Skills (`kind: skill`)** — Loadable knowledge bundles (SKILL.md + references) that agents pull on demand; separates durable domain knowledge from the base instruction to keep context lean and role-focused.
-- **Agent Card Skills** — Public capability advertisements the agent broadcasts on the broker via A2A; used by orchestrators and peer agents to decide whether to delegate a task to this agent.
-- **ValidateComponentConfig Tool** — Validates every generated agent config against the JSON Schema before saving, with structured per-path error messages enforcing correctness of `systemPrompt`, `skills`, and `toolsets`.
-- **`sam config apply` / Declarative Config CLI** — GitOps-style CLI (`plan` / `apply` / `pull`) for authoring and version-controlling all agent resources as YAML; plan output shows a structured diff before anything changes.
 
 ---
 
-## What you're about to do
+## Hands-on
 
 You are going to hire five agents. Just like onboarding a new team member, you start by writing their job description before onboarding --> defining  **system prompt** 
 
@@ -67,7 +63,7 @@ Agent card: one skill — "Diagramming and Document Conversion" — describing t
 
 ## What just happened
 
-Each generated YAML file is the formal role definition for one agent (i.e. signed-off job description before day one). The **system prompt** is the most consequential artifact in the entire agent lifecycle: it defines the agent's identity, domain knowledge, decision-making style, and the boundaries it must never cross.
+Each generated YAML file is the formal role definition for one agent (i.e. signed-off job description before day one). The **system prompt** defines the agent's identity, domain knowledge, decision-making style, and the boundaries it must never cross.
 
 Notice the structure of each system prompt:
 
@@ -79,7 +75,7 @@ Notice the structure of each system prompt:
 
 ---
 
-## Step 2 — Register and deploy the agents
+## Step 2 — Apply the manifest config
 
 Lets apply those agent declaratively
 
@@ -91,4 +87,7 @@ Update my manifest with the agents and apply
 
 ---
 
-When the apply completes successfully, the Hiring stage is done. Each agent has a defined role, a published agent card, and is running on the platform ready to receive tasks. The next stage — **Onboarding** — is where you provision each agent with the data sources, connectors, and access rights it needs to do its job.
+When the apply completes successfully, the Hiring stage is done. Each agent has a defined role, a published agent card, and is running on the platform ready to receive tasks. The next stage: [Onboarding](./300_Onboarding.md) is where you provision each agent with the data sources, connectors, and access rights it needs to do its job.
+
+
+

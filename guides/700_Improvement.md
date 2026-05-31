@@ -8,6 +8,7 @@ Deployment is not the end of the lifecycle — it is day one of the ongoing care
 
 ## Solace Agent Mesh Features
 
+- **Visualizer** — A real-time graphical interface for tracing agent interactions, process flows, and decision pathways across production runs; shows exactly what the agent did and why, enabling teams to identify patterns, confirm improvements, and catch regressions after prompt or skill changes.
 - **Prometheus Metrics Endpoint (`GET /metrics`)** — Exposes agent runtime, broker, gateway, artifact service, and LLM client metrics; enabled via `management_server.observability.enabled: true`.
 - **OTLP Metric Exporters** — Fans agent metrics out to OTLP HTTP or gRPC destinations (Datadog, New Relic, Grafana, OTel Collector) using a shared MeterProvider with a 60-second periodic flush.
 - **OTLP Log Exporters** — Per-exporter log export via `slog` with per-exporter log-level filtering; additive to existing stderr/file handlers; operates independently of Prometheus.
