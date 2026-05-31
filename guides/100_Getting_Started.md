@@ -28,9 +28,8 @@ Welcome to the SKO workshop. This guide walks you through standing up your local
     ```
     # LLM — LiteLLM proxy at mymaas.net
     LLM_SERVICE_ENDPOINT="https://lite-llm.mymaas.net/"
-    LLM_SERVICE_API_KEY="sk-<>"
-    LLM_SERVICE_GENERAL_MODEL_NAME="openai/claude-sonnet-4-6"
-    LLM_SERVICE_PLANNING_MODEL_NAME="openai/claude-sonnet-4-6"
+    MODEL_GENERAL_API_KEY="sk-<>"
+    MODEL_PLANNING_API_KEY="sk-<>"
     ```
     > Note: You can just copy the example env if you cloned this repo `cp .env_example .env`
 1. Update the necessary vars
