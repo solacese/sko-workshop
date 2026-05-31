@@ -43,6 +43,7 @@ Before starting, make sure you have the following:
         docker load -i sam-enterprise-latest.tar.gz
         docker compose up
         ```
+        > Note: you can use podman instead
 1. SAM cli installed in a dedicated dir
     > Note: make sure you do not have any `sam` command installed on your system
     > To confirm, open a terminal session and just type `sam` you should see no command found
