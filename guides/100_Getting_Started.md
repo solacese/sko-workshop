@@ -6,7 +6,6 @@ Welcome to the SKO workshop. This guide walks you through standing up your local
 
 ## Table of Contents
 
-- [Update .env](#update-env)
 - [Create directory](#create-a-working-directory)
 - [Install the SAM skills](#install-the-SAM-skills)
 - [Start the SAM Stack](#start-the-sam-stack)
@@ -21,8 +20,6 @@ Welcome to the SKO workshop. This guide walks you through standing up your local
 - [Back to Workshop Exercise](#back-to-workshop-exercise)
 
 ---
-
-## Update .env
 
 
 ## Create a working directory
