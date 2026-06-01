@@ -34,7 +34,7 @@ Before starting, make sure you have the following:
         - Put `https://lite-llm.mymaas.net/` as endpoint
         - Choose `claude-sonnet-4-6` as the model
         - Test connection and make sure you get a success
-        - Choose built-in sandbox
+        - Choose built-in
 
         ![intro](./guides/img/complete_desktop_config.png)
 
@@ -49,12 +49,19 @@ Before starting, make sure you have the following:
     > To confirm, open a terminal session and just type `sam` you should see no command found
     
     ```bash
+    # Make sure the executable is called sam
+    mv sam-enterprise sam
     # MacOS / Linux / WSL
     cd <path_to_cli_dir>
     chmod +ux sam
     xattr -cr sam
     export PATH=$PATH:$PWD
     # Open new terminal and confirm sam -v works
+    ```
+    > Note: to make sure the sam cli is executable in every terminal session, update your .profile (e.g. ~/.zshrc)
+
+    ```
+    echo "export PATH=$PATH:$PWD" >> ~/.zshrc 
     ```
 
     ```bash

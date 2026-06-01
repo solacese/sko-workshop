@@ -69,7 +69,7 @@ sam skill check
 
   The health check hits `http://localhost:8001/api/v1/platform/health`. Once it returns 200, SAM is ready.
 
-## The New SAM Architecture
+## The New SAM Architecture - mindset shift!
 
 The decision to re-architect Agent Mesh and rewrite it in Go (two independent decisions that happened to be made together) was driven by real technical pain: 
 1. One process or K8S pod per agent/workflow/a2a-proxy was unnecessarily expensive
@@ -121,16 +121,6 @@ AWE uses Go's concurrency primitives throughout:
 - Each incoming request gets its own **request goroutine** (bounded by flow control)
 - Tool calls within a request can run in parallel (each gets its own goroutine)
 - Shutdown uses a `sync.WaitGroup` across all instances so the process waits for every in-flight request to complete before exiting
-
-### Dynamic Instance Management
-
-The AWE control protocol (exposed over the broker) supports hot management without restarts:
-
-- `GET /instances` — list all running instances and their health
-- `POST /instances` — add a new agent/workflow instance at runtime
-- `DELETE /instances/{name}` — stop and remove an instance
-- `PATCH /instances/{name}` — update config of a running instance
-- `GET/PATCH /bindings` — hot-swap LLM model bindings (e.g., switch an agent from Claude to GPT-4 without restart)
 
 ---
 
@@ -299,6 +289,12 @@ Example prompts:
 - "Create an agent config for a customer support agent that has access to the knowledge_base toolset and uses the general model"
 - "Add a sub-task to my orchestrator agent that delegates data collection to a fresh session"
 - "Write a workflow that takes an incoming event and routes it to three parallel agents based on event type"
+
+---
+### Anti-patterns and Best Practices
+
+- Agents == Employee --> == employee has a whole set of tools. E.g. project mgmr employee that has ACCESS to tools
+- More skills. Less agents. Every “agent/employee” loads on demand the tools it needs
 
 ---
 
