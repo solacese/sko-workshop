@@ -24,15 +24,6 @@ Welcome to the SKO workshop. This guide walks you through standing up your local
 
 ## Update .env
 
-1. Create a .env file with the following basic vars
-    ```
-    # LLM — LiteLLM proxy at mymaas.net
-    LLM_SERVICE_ENDPOINT="https://lite-llm.mymaas.net/"
-    MODEL_GENERAL_API_KEY="sk-<>"
-    MODEL_PLANNING_API_KEY="sk-<>"
-    ```
-    > Note: You can just copy the example env if you cloned this repo `cp .env_example .env`
-1. Update the necessary vars
 
 ## Create a working directory
 

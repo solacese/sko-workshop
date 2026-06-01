@@ -28,7 +28,20 @@ Now that your agents have defined roles, it is time to give them access to the d
 
 ## Step 1 — Add the database password to your .env
 
-The connector config will reference the password as an environment variable, not as a plain-text value. Open your `.env` file and add the following line:
+The connector config will reference the password as an environment variable, not as a plain-text value. 
+
+
+1. Create a .env file with the following basic vars
+    ```
+    # LLM — LiteLLM proxy at mymaas.net
+    LLM_SERVICE_ENDPOINT="https://lite-llm.mymaas.net/"
+    MODEL_GENERAL_API_KEY="sk-<>"
+    MODEL_PLANNING_API_KEY="sk-<>"
+    ```
+    > Note: You can just copy the example env if you cloned this repo `cp .env_example .env`
+1. Update the necessary vars
+
+Open your `.env` file and add the following line:
 
 ```
 DB_PASSWORD=thisisaverysecurepassword

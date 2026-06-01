@@ -18,9 +18,9 @@ the session.
 All required executables will be shared the day of the workshop
 
 Before starting, make sure you have the following:
-1. SAM Client
+1. SAM Client (in the client folder, install the OS target)
     1. SAM Desktop executable: SolaceAgentMesh.dmg or sam-desktop-enterprise.exe
-        > Note: On MacOS, after installing the dmg execute the following
+        > Note: On MacOS, after dragging the app to your Applications execute the following:
         ```bash
         xattr -cr /Applications/Solace\ Agent\ Mesh.app
         ```
