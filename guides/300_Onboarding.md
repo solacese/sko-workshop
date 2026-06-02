@@ -27,7 +27,6 @@ In this stage you will onboard your agents by giving them the access and tools t
 - A [PostgreSQL connector](#create-the-postgresql-connector) wired to a live Supabase database
 - A [store-data agent](#create-an-agent-that-uses-the-connector) that queries the database as part of its reasoning loop
 - A [custom Go toolset](#create-a-custom-toolset) implementing Dijkstra's algorithm, published to the Secure Tool Runtime
-- An [Event Mesh Gateway](#create-a-custom-gateway-event-mesh-gateway) that connects the agent mesh to a real-time event stream
 
 This is the onboarding equivalent of a new employee's day one: credentials provisioned, systems connected, tools installed — ready to work.
 
@@ -121,9 +120,6 @@ Edge weights represent travel time in hours.
 What is the shortest path (by total travel time) from Brisbane to Perth?
 
 ```
-
-## Create a custom gateway: Event Mesh Gateway
-
 
 ---
 
