@@ -65,11 +65,10 @@ Before starting, make sure you have the following:
     ```
     echo "export PATH=$PATH:$PWD" >> ~/.zshrc 
     ```
+    **On Windows**
+    - System Properties > Environment Variables > in System Variables edit the Path variable. Add New variable and include the dir where sam.exe is.
+    - Note: you can test it in a new terminal session
 
-    ```bash
-    # Windows from cmd.ex
-    echo @"%USERPROFILE%\sam-enterprise-windows-amd64.exe" %* > "%USERPROFILE%\bin\sam.cmd"
-    ```
 1. A LiteLLM API token
 1. Claude Code installed (`claude --version`)
 1. [Optional] Solace Broker
