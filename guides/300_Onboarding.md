@@ -22,11 +22,18 @@ Once the role is defined, connect the agent to the systems and data sources it n
 
 ## Hands-on
 
-Now that your agents have defined roles, it is time to give them access to the data they need. In this exercise you will provision a PostgreSQL connector backed by a Supabase database and wire it into your manifest. This is the onboarding equivalent of handing a new employee their system credentials on day one.
+In this stage you will onboard your agents by giving them the access and tools they need to do their jobs. By the end you will have built:
+
+- A [PostgreSQL connector](#create-the-postgresql-connector) wired to a live Supabase database
+- A [store-data agent](#create-an-agent-that-uses-the-connector) that queries the database as part of its reasoning loop
+- A [custom Go toolset](#create-a-custom-toolset) implementing Dijkstra's algorithm, published to the Secure Tool Runtime
+- An [Event Mesh Gateway](#create-a-custom-gateway-event-mesh-gateway) that connects the agent mesh to a real-time event stream
+
+This is the onboarding equivalent of a new employee's day one: credentials provisioned, systems connected, tools installed — ready to work.
 
 ---
 
-## Step 1 — Add the database password to your .env
+## Add the database password to your .env
 
 The connector config will reference the password as an environment variable, not as a plain-text value. 
 
@@ -37,19 +44,13 @@ The connector config will reference the password as an environment variable, not
     LLM_SERVICE_ENDPOINT="https://lite-llm.mymaas.net/"
     MODEL_GENERAL_API_KEY="sk-<>"
     MODEL_PLANNING_API_KEY="sk-<>"
+    DB_PASSWORD=thisisaverysecurepassword
     ```
     > Note: You can just copy the example env if you cloned this repo `cp .env_example .env`
-1. Update the necessary vars
-
-Open your `.env` file and add the following line:
-
-```
-DB_PASSWORD=thisisaverysecurepassword
-```
 
 ---
 
-## Step 2 — Create the PostgreSQL connector
+## Create the PostgreSQL connector
 
 Copy and paste the following prompt into Claude Code:
 
@@ -61,9 +62,7 @@ Create a PostgreSQL connector for my SAM project. Use the following connection s
 The password should come from the environment variable DB_PASSWORD. Add the connector to my manifest and apply.
 ```
 
----
-
-## What just happened
+### What just happened
 
 Claude Code generated a `kind: connector` YAML of subtype `sql/postgres` and wired it into your manifest. A few things worth noting:
 
@@ -73,7 +72,7 @@ Claude Code generated a `kind: connector` YAML of subtype `sql/postgres` and wir
 
 ---
 
-## Step 3 — Create an agent that uses the connector
+## Create an agent that uses the connector
 
 With the connector live, wire up a dedicated database agent. Copy and paste the following prompt into Claude Code:
 
@@ -81,11 +80,50 @@ With the connector live, wire up a dedicated database agent. Copy and paste the 
 Create an agent called "store-data" that uses the postgres connector we just created. The agent should be a data specialist focused on querying and retrieving store data from the database. Add it to the manifest and apply.
 ```
 
----
-
-## What just happened
+### What just happened
 
 A new agent was created with the PostgreSQL connector attached to its toolset. This agent can now issue SQL queries against the database as part of its reasoning loop — no separate integration code required. The connector is the only bridge between the agent and the database; the agent never holds credentials directly.
+
+## Create a custom toolset
+
+Onboarding also covers provisioning agents with custom tools — small programs the LLM can call when it cannot solve a problem with text alone. SAM's Secure Tool Runtime (STR) executes these in isolated subprocesses, so a misbehaving tool cannot affect the agent or any other running tool.
+
+Copy and paste the following prompt into Claude Code to scaffold a Go-based toolset:
+
+```
+Using the sam cli, create a go based toolset that implements dijkstra's algorithm
+```
+
+Once the toolset is created, add it to your manifest and deploy:
+
+```
+Now update my local manifest to use this tool and deploy
+```
+
+With the new agent and toolset, interact with the agent using the following prompt: 
+
+```
+I have a weighted directed graph representing flight routes between cities.
+Here is the graph:
+
+{
+  "Sydney":    {"Melbourne": 9, "Brisbane": 10, "Adelaide": 13},
+  "Melbourne": {"Adelaide": 8, "Canberra": 5},
+  "Brisbane":  {"Sydney": 10, "Cairns": 16},
+  "Adelaide":  {"Perth": 26, "Melbourne": 8},
+  "Canberra":  {"Sydney": 3},
+  "Perth":     {"Adelaide": 26},
+  "Cairns":    {}
+}
+
+Edge weights represent travel time in hours.
+
+What is the shortest path (by total travel time) from Brisbane to Perth?
+
+```
+
+## Create a custom gateway: Event Mesh Gateway
+
 
 ---
 

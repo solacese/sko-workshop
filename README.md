@@ -29,9 +29,9 @@ Before starting, make sure you have the following:
         Follow the steps to configure SAM Desktop:
         - Get Started
         - Configure a model now
-        - Enter LiteLLM key
-        - Choose `Custom` as service type
-        - Put `https://lite-llm.mymaas.net/` as endpoint
+        - Enter LiteLLM key manually
+        - From "Service" Choose `Custom` as service type
+        - Put `https://lite-llm.mymaas.net/` as endpoint then click "Looks good"
         - Choose `claude-sonnet-4-6` as the model
         - Test connection and make sure you get a success
         - Choose built-in
@@ -49,12 +49,14 @@ Before starting, make sure you have the following:
     > To confirm, open a terminal session and just type `sam` you should see no command found
     
     ```bash
+    cd <path_to_cli_dir>
     # Make sure the executable is called sam
     mv sam-enterprise sam
     # MacOS / Linux / WSL
-    cd <path_to_cli_dir>
     chmod +ux sam
     xattr -cr sam
+
+    # Make sure to add the sam cli to your path
     export PATH=$PATH:$PWD
     # Open new terminal and confirm sam -v works
     ```
