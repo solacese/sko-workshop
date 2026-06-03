@@ -327,7 +327,7 @@ This workshop walks through every stage of the ADLC hands-on. Each guide covers 
 With your SAM client up and running, prompt CC to scaffold a folder structure for sam
 
 ```
-Using the sam cli, scaffold a folder structure for a local instance of sam desktop running on http://localhost:8000 with no authentication. Then pull any configuration on that instance to update local manifest and setup
+Using the sam cli, scaffold a folder structure for a local instance of sam desktop running on http://localhost:8000 with no authentication. Do not pull any configuration
 ```
 
 Then open the SAM UI at `http://localhost:8000` and start a conversation with `sam`.

@@ -39,7 +39,7 @@ Copy and paste the following prompt into Claude Code:
 
 ---
 ```
-Using the sam cli, create a folder structure that adheres to the solace agent mesh conventions for a local manifest with no authentication. Then add the following agents that leverage the built in tools. Do not apply anything yet
+Using the sam cli, create the following agents that leverage the built in tools. Do not apply anything yet
 Agents to create:
 
 1. Web Researcher
