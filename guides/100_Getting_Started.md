@@ -281,7 +281,7 @@ Example prompts:
 ---
 ### Anti-patterns and Best Practices
 
-- Agents == Employee --> == employee has a whole set of tools. E.g. project mgmr employee that has ACCESS to tools
+- Agents == Employee --> employee has a whole set of tools. E.g. project mgmr employee that has ACCESS to tools
 - More skills. Less agents. Every “agent/employee” loads on demand the tools it needs
 
 ---
@@ -330,7 +330,7 @@ With your SAM client up and running, prompt CC to scaffold a folder structure fo
 Using the sam cli, scaffold a folder structure for a local instance of sam desktop running on http://localhost:8000 with no authentication. Do not pull any configuration
 ```
 
-Then open the SAM UI at `http://localhost:8000` and start a conversation with `sam`.
+Then open the SAM client (Desktop app, or `http://localhost:8000` if running on docker) and start a conversation. 
 
 Once you are comfortable with the basics, use `sam skill install` and ask Claude Code to help you extend the agent — add tools, change the system prompt, or wire up a connector.
 
