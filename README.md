@@ -15,15 +15,19 @@ the session.
 ## Environment Setup
 
 ### Prerequisites
-All required executables will be shared the day of the workshop
+All required executables will be shared the day of the workshop. There are executables for Client, CLI, and Docker; choose the appropriate endpoint.
 
-Before starting, make sure you have the following:
 1. SAM Client (in the client folder, install the OS target)
     1. SAM Desktop executable: SolaceAgentMesh.dmg or sam-desktop-enterprise.exe
         > Note: On MacOS, after dragging the app to your Applications execute the following:
         ```bash
         xattr -cr /Applications/Solace\ Agent\ Mesh.app
         ```
+        > Note: On Windows, if your .exe does not load run the following from Powershell
+        ```bash
+        Start-Process .\sam-desktop-enterprise.exe
+        ```
+
         ![intro](./guides/img/intro.png)
 
         Follow the steps to configure SAM Desktop:
@@ -49,14 +53,16 @@ Before starting, make sure you have the following:
     > To confirm, open a terminal session and just type `sam` you should see no command found
     
     ```bash
-    cd <path_to_cli_dir>
+    cd <path_to_dir_where_cli_installed>
     # Make sure the executable is called sam
+    # Note: Replace the executable name to match what you installed
     mv sam-enterprise sam
     # MacOS / Linux / WSL
     chmod +ux sam
     xattr -cr sam
 
     # Make sure to add the sam cli to your path
+    # For Windows, follow note below
     export PATH=$PATH:$PWD
     # Open new terminal and confirm sam -v works
     ```
@@ -68,12 +74,10 @@ Before starting, make sure you have the following:
     **On Windows**
     - System Properties > Environment Variables > in System Variables edit the Path variable. Add New variable and include the dir where sam.exe is.
     - Note: you can test it in a new terminal session
-
 1. A LiteLLM API token
-1. Claude Code installed (`claude --version`)
+1. [Claude Code installed](https://code.claude.com/docs/en/quickstart) (`claude --version`) [and configured](https://sol-jira.atlassian.net/wiki/spaces/EngPlat/pages/5904760882/Claude+Code+-+Instructions+and+FAQ)
 1. [Optional] Solace Broker
     1. Docker with a running Solace broker container attached to the `sam-network` bridge network
-    
     1. OR you can use Solace Cloud instead
 
 ### If using Docker solace broker: Add the Solace Broker to the Docker Network
