@@ -6,18 +6,21 @@ Welcome to the SKO workshop. This guide walks you through standing up your local
 
 ## Table of Contents
 
-- [Create directory](#create-a-working-directory)
-- [Install the SAM skills](#install-the-SAM-skills)
+- [Create a working directory](#create-a-working-directory)
+- [Install the SAM skills](#install-the-sam-skills)
 - [Start the SAM Stack](#start-the-sam-stack)
-- [The New SAM Architecture](#the-new-sam-architecture)
+- [The New SAM Architecture](#the-new-sam-architecture---mindset-shift)
   - [Component Overview](#component-overview)
   - [AWE: Agent-Workflow Executor](#awe-agent-workflow-executor)
   - [STR: Secure Tool Runtime](#str-secure-tool-runtime)
   - [Gateway](#gateway)
   - [SAM CLI](#sam-cli)
   - [Declarative SAM — `sam config apply`](#declarative-sam--sam-config-apply)
+  - [Anti-patterns and Best Practices](#anti-patterns-and-best-practices)
   - [No ADK — What Changed](#no-adk--what-changed)
-- [Back to Workshop Exercise](#back-to-workshop-exercise)
+- [Agent Development Lifecycle](#agent-development-lifecycle)
+- [Back to Workshop Exercise](#back-to-workshop-exercise-skip-if-running-from-scratch)
+- [Hiring](#hiring)
 
 ---
 
@@ -283,7 +286,11 @@ Example prompts:
 
 - Agents == Employee --> employee has a whole set of tools. E.g. project mgmr employee that has ACCESS to tools
 - More skills. Less agents. Every “agent/employee” loads on demand the tools it needs
-
+- Don't define an agent per utility
+- Every agent has the capability to run sub-processes. Agent can choose at anytime to branch off from itself, and it can choose to split the context
+  - E.g. Orchestrator needs to create report that has all the team members and what they worked on. The request to go get the data doesn’t need the previous context. Do a new task heres the name of ppl and get me the data. The sub process doesn’t need the previous context”
+  
+- Use declarative SAM: sam cli is capable of applying a config on disk that represents everything in sam and reconcile with a running sam instance 
 ---
 
 ### No ADK — What Changed
