@@ -18,9 +18,8 @@ Welcome to the SKO workshop. This guide walks you through standing up your local
   - [Declarative SAM — `sam config apply`](#declarative-sam--sam-config-apply)
   - [Anti-patterns and Best Practices](#anti-patterns-and-best-practices)
   - [No ADK — What Changed](#no-adk--what-changed)
-- [Agent Development Lifecycle](#agent-development-lifecycle)
 - [Back to Workshop Exercise](#back-to-workshop-exercise-skip-if-running-from-scratch)
-- [Hiring](#hiring)
+- [Before You Build: Understanding the ADLC](#before-you-build-understanding-the-adlc)
 
 ---
 
@@ -313,22 +312,6 @@ This caused:
 
 ---
 
-## Agent Development Lifecycle
-![adlc](./img/adlc.png)
-
-The Agent Development Lifecycle (ADLC) is a six-stage framework for conceiving, building, deploying, governing, and continuously improving AI agents in the enterprise. It draws on lessons from both the software development lifecycle (SDLC) and the human employee lifecycle. Each stage addresses a distinct challenge:
-1. defining what an agent does (Hiring), giving it the right access (Onboarding),
-1. validating that it performs correctly (Coaching),
-1. maintaining human oversight (Supervision),1.
-integrating it into a team of agents (Teamwork), and
-1. keeping it improving over time (Improvement). 
-
-Every stage of the ADLC maps directly to features in Solace Agent Mesh from the agent builder and skill system that support role definition, to connectors and gateways for access provisioning, to evals and telemetry for performance monitoring.
-
-This workshop walks through every stage of the ADLC hands-on. Each guide covers what the stage means in practice and which SAM features you'll use to implement it.
-
----
-
 ## Back to Workshop Exercise [Skip if running from scratch]
 
 With your SAM client up and running, prompt CC to scaffold a folder structure for sam
@@ -341,5 +324,8 @@ Then open the SAM client (Desktop app, or `http://localhost:8000` if running on 
 
 Once you are comfortable with the basics, use `sam skill install` and ask Claude Code to help you extend the agent — add tools, change the system prompt, or wire up a connector.
 
-## Hiring
-[Get started with Hiring phase](./200_Hiring.md)
+## Before You Build: Understanding the ADLC
+
+Before jumping into agent development, it is worth understanding the framework that shapes everything in this workshop.
+
+[ADLC Background](./101_ADLC.md) covers what the ADLC is, why a new methodology is needed for agents, and how Solace has adopted and positioned it.
