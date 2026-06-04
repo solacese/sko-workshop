@@ -53,7 +53,7 @@ All required executables will be shared the day of the workshop. There are execu
     > To confirm, open a terminal session and just type `sam` you should see no command found
     
     ```bash
-    cd <path_to_dir_where_cli_installed>
+    cd <path_to_dir_where_cli_downloaded>
     # Make sure the executable is called sam
     # Note: Replace the executable name to match what you installed
     mv sam-enterprise sam
