@@ -122,6 +122,9 @@ What is the shortest path (by total travel time) from Brisbane to Perth?
 ```
 
 ---
+Working with pulled configurations: [Config Pull](./301_config_pull.md)
+
+---
 
 When the apply completes, the Onboarding stage is done. Your agents now have a live data connection they can query. The next stage — [Coaching](./400_Coaching.md) — is where you validate that they use it correctly before promoting to production.
 
