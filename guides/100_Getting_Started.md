@@ -31,6 +31,7 @@ mkdir sko_bootcamp
 cd sko_bootcamp
 # open in VSCode
 code .
+# If you dont have the code command yet installed, just open vscode and open a new workspace 
 ```
 
 ## Install the SAM skills

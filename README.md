@@ -75,6 +75,7 @@ All required executables will be shared the day of the workshop. There are execu
     - System Properties > Environment Variables > in System Variables edit the Path variable. Add New variable and include the dir where sam.exe is.
     - Note: you can test it in a new terminal session
 1. A LiteLLM API token
+1. [VsCode](https://code.visualstudio.com/download) (or any code editor with an ai-assisted tool)
 1. [Claude Code installed](https://code.claude.com/docs/en/quickstart) (`claude --version`) [and configured](https://sol-jira.atlassian.net/wiki/spaces/EngPlat/pages/5904760882/Claude+Code+-+Instructions+and+FAQ)
 1. [Optional] Solace Broker
     1. Docker with a running Solace broker container attached to the `sam-network` bridge network
