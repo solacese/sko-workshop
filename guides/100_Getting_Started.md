@@ -75,10 +75,6 @@ SAM is now composed of 3 separate runtimes:
 
 ![runtime](img/runtimes.png)
 
-- **Gateway** -- the entry point for all external traffic; translates HTTP, SSE, event mesh, and RPC requests into broker messages that agents can consume.
-- **AWE (Agent-Workflow Executor)** -- the brain; loads and runs your agent and workflow configs, handles LLM calls, tool orchestration, and session management.
-- **STR (Secure Tool Runtime)** -- the sandbox; executes tools (Python or Go) in isolated subprocesses so a misbehaving tool cannot affect the agent or any other tool running alongside it.
-
 ---
 
 ### AWE: Agent-Workflow Executor
