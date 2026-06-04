@@ -170,22 +170,6 @@ sam api            Direct API calls to the SAM platform
 > [!TIP]
 > We will almost never be calling these commands directly from the cli. The SAM skills houses detailed documentation of all of this, and hence, we will only be using AI-assisted tools to interact with sam cli
 
-### sam run — Starting SAM Locally [SKIP THIS IF YOU ARE RUNNING VIA DOCKER OR DESKTOP APP]
-
-```bash
-# Standard subprocess mode (separate AWE, STR, Gateway subprocesses)
-sam run
-
-# All-in-one embedded mode (in-process DevBroker, no subprocesses)
-# Useful for development — no Solace broker needed
-sam run --embedded
-
-# Expose the in-process DevBroker on a TCP port so external STR containers can connect
-sam run --embedded --network-broker-port 55554
-```
-
-The `--embedded` flag starts an in-memory DevBroker and runs everything in one process. This eliminates the Solace broker dependency for local development.
-
 ---
 
 ### Declarative SAM — `sam config apply`
