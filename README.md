@@ -61,15 +61,11 @@ All required executables will be shared the day of the workshop. There are execu
     chmod +ux sam
     xattr -cr sam
 
-    # Make sure to add the sam cli to your path
-    # For Windows, follow note below
-    export PATH=$PATH:$PWD
-    # Open new terminal and confirm sam -v works
-    ```
-    > Note: to make sure the sam cli is executable in every terminal session, update your .profile (e.g. ~/.zshrc)
-
-    ```
+    # Make sure to add the sam cli to your path and update your .profile (e.g. ~/.zshrc)
     echo "export PATH=$PATH:$PWD" >> ~/.zshrc 
+    source ~/.zshrc 
+    # Confirm sam is working
+    sam -h
     ```
     **On Windows**
     - System Properties > Environment Variables > in System Variables edit the Path variable. Add New variable and include the dir where sam.exe is.
