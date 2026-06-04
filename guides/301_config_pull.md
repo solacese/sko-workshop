@@ -1,7 +1,3 @@
-- pull the config from prod
-- delete the content
-- apply to local
-
 # SAM Workflows Workshop
 In this section we you will get to learn how to use declarative sam to pull configuration from a remote instance
 
