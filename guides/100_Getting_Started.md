@@ -44,7 +44,7 @@ sam skill install
 sam skill check
 ```
 
-## Start the SAM Stack
+## Start the SAM Client
 
 1. Launch the SAM Desktop app
 1. OR run the following docker command
@@ -53,12 +53,6 @@ sam skill check
   # From this directory
   docker compose up
   ```
-
-  The container exposes two ports:
-  - **8000** — SAM UI and the Gateway API (agent requests go here)
-  - **8001** — Platform API (health, config, deployment)
-
-  The health check hits `http://localhost:8001/api/v1/platform/health`. Once it returns 200, SAM is ready.
 
 ## The New SAM Architecture - mindset shift!
 
