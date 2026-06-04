@@ -49,11 +49,11 @@ The ADLC is not a Solace invention. It is an industry-emerging term adopted by L
 
 The ADLC serves three distinct audiences inside Solace:
 
-**Product** — The ADLC is the north star for our product roadmap. Every SAM feature maps to a stage. When we evaluate what to build next, we ask which ADLC stage it strengthens.
+1. **Product**: The ADLC is the north star for our product roadmap. Every SAM feature maps to a stage. When we evaluate what to build next, we ask which ADLC stage it strengthens.
 
-**Sales** — The ADLC is our pitch framework. Instead of leading with features, we walk customers through the journey they will experience. We identify where they are, highlight the challenges ahead, and show how SAM addresses each one. An agent harness like LangGraph or DeepAgent is not enough. The ADLC makes that point in context.
+1. **Sales**: The ADLC is our pitch framework. Instead of leading with features, we walk customers through the journey they will experience. We identify where they are, highlight the challenges ahead, and show how SAM addresses each one. An agent harness like LangGraph or DeepAgent is not enough. The ADLC makes that point in context.
 
-**Professional Services (PSG/JEDAI)** — The ADLC is the technical methodology PSG uses post-sale. It gives delivery teams a shared language and a structured path from first agent to production-grade deployment.
+1. **Professional Services (PSG/JEDAI)**: The ADLC is the technical methodology PSG uses post-sale. It gives delivery teams a shared language and a structured path from first agent to production-grade deployment.
 
 ### Positioning It With Customers
 
