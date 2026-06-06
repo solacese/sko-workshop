@@ -26,6 +26,8 @@ All required executables will be shared the day of the workshop. There are execu
         > Note: On Windows, if your .exe does not load run the following from Powershell
         ```bash
         Start-Process .\sam-desktop-enterprise.exe
+        # if you get any errors with Start-Process
+        .\sam-desktop-enterprise.exe
         ```
 
         ![intro](./guides/img/intro.png)
