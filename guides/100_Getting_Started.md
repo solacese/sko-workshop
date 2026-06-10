@@ -40,6 +40,9 @@ code .
 # Install the SAM skill into Claude Code
 sam skill install
 
+# NOTE. If you are using the latest cli
+sam ai-assistance skill install
+
 # Verify the installed version matches the CLI
 sam skill check
 ```
