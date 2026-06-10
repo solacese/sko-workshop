@@ -3,8 +3,7 @@ services:
     image: sam-enterprise:latest
     platform: linux/amd64
     ports:
-      - "8000:8000"   # SAM UI + Gateway API
-      - "8001:8001"   # Platform API (health, config)
+      - "8000:8800"   # SAM UI + Gateway API
     volumes:
       - sam-data:/tmp/sam-data
     networks:
@@ -23,11 +22,11 @@ services:
       - .env
 
     healthcheck:
-      test: ["CMD-SHELL", "curl -sf http://localhost:8001/api/v1/platform/health || exit 1"]
-      interval: 10s
+      test: ["CMD-SHELL", "python3 -c \"import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://localhost:8800/api/v1/platform/health').status==200 else 1)\""]
+      interval: 15s
       timeout: 5s
-      retries: 12
-      start_period: 30s
+      retries: 20
+      start_period: 120s
 
 networks:
   # Declare sam-network as external so Docker Compose attaches to the
